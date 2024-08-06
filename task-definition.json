@@ -1,0 +1,62 @@
+{
+  "family": "django-polls-task",
+  "networkMode": "bridge",
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "image": "ramakrishna41/django-polls:latest",
+      "cpu": 128,
+      "memory": 512,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000
+        }
+      ],
+      "environment": [
+        { "name": "DB_HOST", "value": "db" },
+        { "name": "DB_PORT", "value": "3306" },
+        { "name": "DB_NAME", "value": "django_polls" },
+        { "name": "DB_USER", "value": "user" },
+        { "name": "DB_PASSWORD", "value": "password" }
+      ],
+      "entryPoint": ["sh", "-c"],
+      "command": [
+        "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/django-polls",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "db",
+      "image": "mysql:5.7",
+      "cpu": 128,
+      "memory": 512,
+      "environment": [
+        { "name": "MYSQL_ROOT_PASSWORD", "value": "rootpassword" },
+        { "name": "MYSQL_DATABASE", "value": "django_polls" },
+        { "name": "MYSQL_USER", "value": "user" },
+        { "name": "MYSQL_PASSWORD", "value": "password" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/mysql",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "essential": true
+    }
+  ],
+  "requiresCompatibilities": ["EC2"],
+  "cpu": "256",
+  "memory": "512"
+}
