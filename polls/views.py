@@ -213,20 +213,21 @@ def poll_vote(request, poll_id):
         vote = Vote(user=request.user, poll=poll, choice=choice)
         vote.save()        
 
-        # get poll creator email
-        poll_creator_email = poll.owner.email
-        # Construct the email
-        subject = f'New vote for your poll: {poll.text}'
-        message = f'A new vote has been cast for your poll "{poll.text}".'
-        # Send the email
-        send_mail(subject, message, settings.EMAIL_HOST_USER, [poll_creator_email])       
+        # # get poll creator email
+        # poll_creator_email = poll.owner.email
+        # # Construct the email
+        # subject = f'New vote for your poll: {poll.text}'
+        # message = f'A new vote has been cast for your poll "{poll.text}".'
+        # # Send the email
+        # send_mail(subject, message, settings.EMAIL_HOST_USER, [poll_creator_email])
 
         return render(request, 'polls/poll_result.html', {'poll': poll})
     else:
         messages.error(
             request, "No choice selected!", extra_tags='alert alert-warning alert-dismissible fade show')
         return redirect("polls:detail", poll_id)
-    return render(request, 'polls/poll_result.html', {'poll': poll})
+
+    # return render(request, 'polls/poll_result.html', {'poll': poll})
 
 
 @login_required
