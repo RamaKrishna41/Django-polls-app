@@ -35,4 +35,4 @@ RUN python -m pip install --upgrade pip \
 # Step 8) Run the project
 EXPOSE 8000
 
-CMD ["python", "manage.py", "makemigrations", ";", "python", "manage.py", "migrate", ";", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["python", "manage.py", "makemigrations", ";", "python", "manage.py", "migrate", ";", "python", "manage.py", "createsuperuser.py", ";", "python", "manage.py", "runserver", "0.0.0.0:8000"]
